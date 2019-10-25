@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "start": "ts-node ./src/index.js",
+    "start": "ts-node ./src/index.ts",
     "build": "tsc ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src/**/*.ts",
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/FINDarkside/tobenamed-desktop-client#readme",
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^12.11.7",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
     "eslint": "^6.5.1",
