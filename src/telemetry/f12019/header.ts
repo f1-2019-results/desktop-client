@@ -1,11 +1,11 @@
 export interface PacketHeader {
-    packetFormat: Number
-    gameMajorVersion: Number
-    gameMinorVersion: Number
-    packetVersion: Number
-    packetId: Number
-    sessionUID: Buffer
-    sessionTime: Number
-    frameIdentifier: Number
-    playerCarIndex: Number
+    packetFormat: number
+    gameMajorVersion: number
+    gameMinorVersion: number
+    packetVersion: number
+    packetId: number
+    sessionUID: number
+    sessionTime: number
+    frameIdentifier: number
+    playerCarIndex: number
 }

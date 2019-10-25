@@ -1,8 +1,12 @@
 import * as dgram from 'dgram';
 import * as fs from 'fs';
+import * as util from 'util';
+import { parseHeader } from './parseDump';
+const readFile = util.promisify(fs.readFile);
+
 const port = 20777;
 
-const HEADER_SIZE = 24;
+const HEADER_SIZE = 23;
 
 async function init(): Promise<void> {
     const socket = dgram.createSocket('udp4');
@@ -11,9 +15,9 @@ async function init(): Promise<void> {
     let raceStarted = false;
 
     socket.on('message', (buf) => {
-        const header = parseHeader(buf);
+        const header = parseHeader(buf, 0);
         if (header.packetId === 3) {
-            const event = buf.toString('utf8', HEADER_SIZE - 1, HEADER_SIZE + 3);
+            const event = buf.toString('utf8', HEADER_SIZE, HEADER_SIZE + 4);
             if (event === 'SSTA') {
                 console.log('Race started');
                 raceStarted = true;
@@ -39,10 +43,17 @@ async function init(): Promise<void> {
     socket.bind(port)
 }
 
-function parseHeader(buf: Buffer) {
-    return {
-        packetId: buf.readUInt8(5)
+async function processDump(s: string) {
+    const buf = await readFile(s);
+    let offset = 0;
+    const result = {
+        lapData: []
+    };
+    while (offset < buf.length) {
+        const header = parseHeader(buf, offset);
+
     }
+    fs.writeFileSync('./dump.json', JSON.stringify(result));
 }
 
 init()
