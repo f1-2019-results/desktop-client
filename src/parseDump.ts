@@ -18,11 +18,11 @@ export default function parseDump(buf: Buffer): RaceData {
 
     while (offset < buf.length) {
         const header = parseHeader(buf, offset);
-         if (header.packetId === 2) {
+        if (header.packetId === 2) {
             const lapData = parseLapData(buf, offset + HEADER_SIZE);
             for (let i = 0; i < lapData.length; i++) {
                 const data = lapData[i];
-                if(!result.lapData[data.lapNum]){
+                if (!result.lapData[data.lapNum]) {
                     result.lapData[data.lapNum] = {
                         lap: data.lapNum,
                         timings: [],
@@ -93,7 +93,8 @@ function parseLapData(buf: Buffer, offset: number): Array<LapData> {
 
 function parseParticipants(buf: Buffer, offset: number) {
     const participants = [];
-    for (let i = 0; i < 20; i++) {
+    const cars = buf.readUInt8(offset++);
+    for (let i = 0; i < cars; i++) {
         participants.push({
             aiControlled: buf.readUInt8(offset) !== 0,
             driverId: buf.readUInt8(offset + 1),
