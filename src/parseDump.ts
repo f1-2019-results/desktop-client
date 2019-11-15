@@ -22,25 +22,25 @@ export default function parseDump(buf: Buffer): RaceData {
             const lapData = parseLapData(buf, offset + HEADER_SIZE);
             for (let i = 0; i < lapData.length; i++) {
                 const data = lapData[i];
-                if (!result.lapData[data.lapNum]) {
-                    result.lapData[data.lapNum] = {
+                if (!result.lapData[data.lapNum - 1]) {
+                    result.lapData.push({
                         lap: data.lapNum,
                         timings: [],
-                    };
+                    });
                 }
-                if (!result.lapData[data.lapNum].timings[i]) {
-                    result.lapData[data.lapNum].timings[i] = {
+                if (!result.lapData[data.lapNum - 1].timings[i]) {
+                    result.lapData[data.lapNum - 1].timings[i] = {
                         driverId: result.participants[i].driverId,
                         invalidLap: false,
                     };
                 }
                 if (data.lapNum > 1 && lastLap[i] < data.lapNum) {
-                    const currentDriversLapResult = result.lapData[data.lapNum - 1].timings[i];
+                    const currentDriversLapResult = result.lapData[data.lapNum - 2].timings[i];
                     currentDriversLapResult.lapTime = data.lastLapTime;
                     currentDriversLapResult.position = data.position;
                     lastLap[i] = data.lapNum;
                 }
-                const currentDriversLapResult = result.lapData[data.lapNum].timings[i];
+                const currentDriversLapResult = result.lapData[data.lapNum - 1].timings[i];
                 currentDriversLapResult.driverId = result.participants[i].driverId;
                 if (data.currentSector > 1)
                     currentDriversLapResult.sector1 = data.sector1;
