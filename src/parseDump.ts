@@ -1,11 +1,13 @@
 import { RaceData } from './raceData';
 import LapData from './telemetry/f12019/LapData';
 
-const HEADER_SIZE = 23;
-const LAP_DATA_SIZE = 843;
-const PARTICIPANTS_SIZE = 1104;
+const packetSizes = [
+    1343, 149, 843, 32, 1104, 843, 1347, 1143
+]
 
-export function parseDump(buf: Buffer): RaceData {
+const HEADER_SIZE = 23;
+
+export default function parseDump(buf: Buffer): RaceData {
     let offset = 0;
     const result: RaceData = {
         lapData: [],
@@ -16,20 +18,23 @@ export function parseDump(buf: Buffer): RaceData {
 
     while (offset < buf.length) {
         const header = parseHeader(buf, offset);
-        if (header.packetId === 1) {
-            offset += 149;
-        } else if (header.packetId === 2) {
+         if (header.packetId === 2) {
             const lapData = parseLapData(buf, offset + HEADER_SIZE);
             for (let i = 0; i < lapData.length; i++) {
                 const data = lapData[i];
+                if(!result.lapData[data.lapNum]){
+                    result.lapData[data.lapNum] = {
+                        lap: data.lapNum,
+                        timings: [],
+                    };
+                }
                 if (!result.lapData[data.lapNum].timings[i]) {
                     result.lapData[data.lapNum].timings[i] = {
                         driverId: result.participants[i].driverId,
                         invalidLap: false,
                     };
                 }
-
-                if (lastLap[i] < data.lapNum) {
+                if (data.lapNum > 1 && lastLap[i] < data.lapNum) {
                     const currentDriversLapResult = result.lapData[data.lapNum - 1].timings[i];
                     currentDriversLapResult.lapTime = data.lastLapTime;
                     currentDriversLapResult.position = data.position;
@@ -44,7 +49,6 @@ export function parseDump(buf: Buffer): RaceData {
                 if (data.lapInvalid)
                     currentDriversLapResult.invalidLap = true;
             }
-            offset += LAP_DATA_SIZE - HEADER_SIZE;
         } else if (header.packetId === 4) {
             if (!result.participants.length) {
                 result.participants = parseParticipants(buf, offset + HEADER_SIZE);
@@ -57,8 +61,8 @@ export function parseDump(buf: Buffer): RaceData {
                     }
                 }
             }
-            offset += PARTICIPANTS_SIZE - HEADER_SIZE;
         }
+        offset += packetSizes[header.packetId];
     }
     return result;
 }

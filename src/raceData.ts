@@ -1,16 +1,14 @@
 export interface RaceData {
     lapData: Array<{
         lap: number
-        timings: [
-            {
-                driverId: number
-                sector1?: number
-                sector2?: number
-                lapTime?: number
-                position?: number
-                invalidLap: boolean
-            }
-        ]
+        timings: Array<{
+            driverId: number
+            sector1?: number
+            sector2?: number
+            lapTime?: number
+            position?: number
+            invalidLap: boolean
+        }>
     }>
     participants: Array<{
         aiControlled: boolean
