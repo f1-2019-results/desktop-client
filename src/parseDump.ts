@@ -98,7 +98,7 @@ function parseParticipants(buf: Buffer, offset: number) {
             aiControlled: buf.readUInt8(offset) !== 0,
             driverId: buf.readUInt8(offset + 1),
             teamId: buf.readUInt8(offset + 2),
-            name: buf.toString('utf8', offset + 5, offset + 5 + 48)
+            name: buf.toString('utf8', offset + 5, offset + 5 + 48).replace(/\0/g, ''),
         });
         offset += 54;
     }
