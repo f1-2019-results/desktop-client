@@ -4,6 +4,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "baseUrl": "src",
-        "strictNullChecks": true
+        "outDir": "build",
+        "strict": true
     },
 }
