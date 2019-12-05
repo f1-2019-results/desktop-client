@@ -1,12 +1,11 @@
-import { BChainableParser, BParser, BParserOptions } from './bParse';
+import { BParser, BParserOptions } from './types';
 
-export default class BArrayParser extends BChainableParser {
+export default class BArrayParser implements BParser {
 
     public size: number;
     private itemParsers: Array<BParser> = [];
 
     constructor(items: Array<BParser>, protected options: BParserOptions) {
-        super();
         this.itemParsers = items;
         this.size = this.itemParsers.reduce((prev, parser) => prev + parser.size, 0);
     }

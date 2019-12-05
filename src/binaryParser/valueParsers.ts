@@ -1,4 +1,4 @@
-import { BParser, Endianness, BParserOptions } from './bParse';
+import { BParser, Endianness, BParserOptions } from './types';
 
 export class Int8Parser implements BParser {
     size = 1;
