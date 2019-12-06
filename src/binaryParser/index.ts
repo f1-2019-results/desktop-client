@@ -26,7 +26,7 @@ export default {
   uint16: (...args: ConstructorParameters<typeof parsers.Uint16Parser>) => new parsers.Uint16Parser(...args),
   int32: (...args: ConstructorParameters<typeof parsers.Int32Parser>) => new parsers.Int32Parser(...args),
   uint32: (...args: ConstructorParameters<typeof parsers.Uint32Parser>) => new parsers.Uint32Parser(...args),
-  int64: (...args: ConstructorParameters<typeof parsers.Int32Parser>) => new parsers.Int32Parser(...args),
+  int64: (...args: ConstructorParameters<typeof parsers.Int64Parser>) => new parsers.Int64Parser(...args),
   uint64: (...args: ConstructorParameters<typeof parsers.Uint64Parser>) => new parsers.Uint64Parser(...args),
   string: (...args: ConstructorParameters<typeof parsers.StringParser>) => new parsers.StringParser(...args)
 };
