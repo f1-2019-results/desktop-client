@@ -1,25 +1,10 @@
-import BArrayParser from "./BArrayParser";
-import BObjectParser from "./BObjectParser";
 import * as parsers from "./valueParsers";
-import { BParser, BParserOptions, Endianness } from "./types";
-
-function object(
-  fields: { [key: string]: BParser },
-  options: BParserOptions = { endianness: Endianness.LittleEndian }
-) {
-  return new BObjectParser(fields, options);
-}
-
-function array(
-  items: Array<BParser>,
-  options: BParserOptions = { endianness: Endianness.LittleEndian }
-) {
-  return new BArrayParser(items, options);
-}
+import ObjectParser from "./ObjectParser";
+import ArrayParser from "./ArrayParser";
 
 export default {
-  object,
-  array,
+  object: (...args: ConstructorParameters<typeof ObjectParser>) => new ObjectParser(...args),
+  array: (...args: ConstructorParameters<typeof ArrayParser>) => new ArrayParser(...args),
   int8: (...args: ConstructorParameters<typeof parsers.Int8Parser>) => new parsers.Int8Parser(...args),
   uint8: (...args: ConstructorParameters<typeof parsers.Uint8Parser>) => new parsers.Uint8Parser(...args),
   int16: (...args: ConstructorParameters<typeof parsers.Int16Parser>) => new parsers.Int16Parser(...args),

@@ -1,11 +1,12 @@
-import { BParser, BParserOptions } from './types';
+import { Parser } from './types';
 
-export default class BArrayParser implements BParser {
+export default class ArrayParser extends Parser {
 
     public size: number;
-    private itemParsers: Array<BParser> = [];
+    private itemParsers: Array<Parser> = [];
 
-    constructor(items: Array<BParser>, protected options: BParserOptions) {
+    constructor(items: Array<Parser>) {
+        super();
         this.itemParsers = items;
         this.size = this.itemParsers.reduce((prev, parser) => prev + parser.size, 0);
     }
@@ -18,4 +19,5 @@ export default class BArrayParser implements BParser {
         }
         return result;
     }
+
 }

@@ -1,11 +1,12 @@
-import { BParser, BParserOptions } from "./types";
+import { Parser } from "./types";
 
-export default class BObjectParser implements BParser {
+export default class ObjectParser extends Parser {
 
   public size: number;
-  private fields: Array<[string, BParser]> = [];
+  private fields: Array<[string, Parser]> = [];
 
-  constructor(fields: { [key: string]: BParser }, protected options: BParserOptions) {
+  constructor(fields: { [key: string]: Parser }) {
+    super();
     this.fields = Object.entries(fields);
     this.size = this.fields.reduce((prev, parser) => prev + parser[1].size, 0);
   }
@@ -18,4 +19,5 @@ export default class BObjectParser implements BParser {
     }
     return result;
   }
+
 }
