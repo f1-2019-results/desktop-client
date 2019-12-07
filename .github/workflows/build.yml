@@ -13,9 +13,9 @@ jobs:
       with:
         node-version: 12.x
     - run: npm ci
-    - run: npm run coverage
     - name: Lint
       run: npm run lint
+    - run: npm run coverage
     - uses: codecov/codecov-action@v1
       with:
         token: ${{secrets.CODECOV_TOKEN}}
@@ -31,9 +31,9 @@ jobs:
       with:
         node-version: 12.x
     - run: npm ci
-    - run: npm run coverage
     - name: Lint
       run: npm run lint
+    - run: npm run coverage
     - uses: codecov/codecov-action@v1
       with:
         token: ${{secrets.CODECOV_TOKEN}}
