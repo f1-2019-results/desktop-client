@@ -3,9 +3,27 @@ name: build
 on: [push]
 
 jobs:
-  build:
+  build-windows:
 
     runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - run: npm ci
+    - run: npm run coverage
+    - name: Lint
+      run: npm run lint
+    - uses: codecov/codecov-action@v1
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage/lcov.info
+        
+  build-ubuntu:
+
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v1
