@@ -11,3 +11,9 @@ BigInt.prototype.toJSON = function () {
 
 import * as chai from 'chai';
 chai.should();
+
+describe('Binary parser', () => {
+    require('./binaryParser/ValueParsers.test');
+    require('./binaryParser/ObjectParser.test');
+    require('./binaryParser/StringParser.test');
+});
