@@ -93,7 +93,8 @@ export class StringParser extends Parser {
             throw new Error('Variable size String not implemented');
 
         let s = buf.toString(encoding || 'utf8', offset, offset + this.size);
-        s = s.substring(0, s.indexOf('\0'));
+        if (s.indexOf('\0') !== -1)
+            s = s.substring(0, s.indexOf('\0'));
         return s;
     }
 
