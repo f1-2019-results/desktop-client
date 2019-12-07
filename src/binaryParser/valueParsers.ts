@@ -4,7 +4,7 @@ export class Int8Parser extends NumberParser {
     size = 1;
 
     parse(buf: Buffer, offset = 0) {
-        return buf.readInt8(offset);
+                return buf.readInt8(offset);
     }
 }
 
@@ -20,7 +20,7 @@ export class Int16Parser extends NumberParser {
     size = 2;
 
     parse(buf: Buffer, offset = 0) {
-        if (this.options.endianness === Endianness.LittleEndian)
+    if (this.options.endianness === Endianness.LittleEndian)
             return buf.readInt16LE(offset);
         return buf.readInt16BE(offset);
     }
@@ -41,8 +41,8 @@ export class Int32Parser extends NumberParser {
 
     parse(buf: Buffer, offset = 0) {
         if (this.options.endianness === Endianness.LittleEndian)
-            return buf.readInt32LE(offset);
-        return buf.readInt32BE(offset);
+            return buf.readInt32LE(offset)
+        return buf.readInt32BE(offset)
     }
 }
 
