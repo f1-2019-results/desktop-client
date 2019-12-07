@@ -1,5 +1,5 @@
 import bParse from '../src/binaryParser';
-import { BParser, Endianness } from '../src/binaryParser/types';
+import { Parser, Endianness } from '../src/binaryParser/types';
 import { expect } from 'chai';
 
 describe('binaryParser', () => {
@@ -38,7 +38,7 @@ describe('binaryParser', () => {
         });
     }
 
-    function test(parser: BParser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0) {
+    function test(parser: Parser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0) {
         const buf = Buffer.alloc(parser.size + offset);
         for (let i = 0; i < offset; i++)
             buf.writeInt8(255, i);

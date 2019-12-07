@@ -15,7 +15,7 @@ export abstract class Parser {
   /** Size in bytes */
   abstract size: number;
   abstract parse(buf: Buffer, offset?: number): any;
-  private options = defaultOptions;
+  protected options = defaultOptions;
 
   defaultOptions(options: Partial<DefaultOptions>) {
     Object.assign(this.options, options);
@@ -26,7 +26,7 @@ export abstract class Parser {
 
 export abstract class NumberParser extends Parser {
 
-  private endianness?: Endianness;
+  protected endianness?: Endianness;
 
   littleEndian() {
     this.endianness = Endianness.LittleEndian;
