@@ -1,6 +1,6 @@
 import { NumberParser, Endianness, Parser } from './types';
 
-export class Int8Parser extends Parser {
+export class Int8Parser extends NumberParser {
     size = 1;
 
     parse(buf: Buffer, offset = 0) {
@@ -8,7 +8,7 @@ export class Int8Parser extends Parser {
     }
 }
 
-export class Uint8Parser extends Parser {
+export class Uint8Parser extends NumberParser {
     size = 1;
 
     parse(buf: Buffer, offset = 0) {
@@ -104,6 +104,7 @@ export class StringParser extends Parser {
 
     encoding(s: string) {
         this._encoding = s;
+        return this;
     }
 
 }

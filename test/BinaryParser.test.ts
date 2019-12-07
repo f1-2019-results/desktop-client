@@ -1,6 +1,6 @@
 require('./_index');
 import bParse from '../src/binaryParser';
-import { Parser, Endianness } from '../src/binaryParser/types';
+import { Parser, Endianness, NumberParser } from '../src/binaryParser/types';
 import { expect } from 'chai';
 
 describe('binaryParser', () => {
@@ -18,28 +18,33 @@ describe('binaryParser', () => {
     for (const testCase of numberParsers) {
         describe(`${testCase.parserName} parser`, () => {
             // @ts-ignore
-            const parser = bParse[testCase.parserName]({ endianness: Endianness.LittleEndian }) as BParser;
+            const parser = bParse[testCase.parserName]() as NumberParser;
             const convertNumber = (num: bigint | number) => parser.size <= 4 ? Number(num) : BigInt(num);
 
             it('parses small values correctly', () => {
-                test(parser, convertNumber(0), testCase.signed, Endianness.LittleEndian, 0);
-                test(parser, convertNumber(1), testCase.signed, Endianness.LittleEndian, 0);
-                test(parser, convertNumber(25), testCase.signed, Endianness.LittleEndian, 0);
+                testNumber(parser, convertNumber(0), testCase.signed, Endianness.LittleEndian, 0);
+                testNumber(parser, convertNumber(1), testCase.signed, Endianness.LittleEndian, 0);
+                testNumber(parser, convertNumber(25), testCase.signed, Endianness.LittleEndian, 0);
                 if (testCase.signed) {
-                    test(parser, convertNumber(-1), testCase.signed, Endianness.LittleEndian, 0);
-                    test(parser, convertNumber(-25), testCase.signed, Endianness.LittleEndian, 0);
+                    testNumber(parser, convertNumber(-1), testCase.signed, Endianness.LittleEndian, 0);
+                    testNumber(parser, convertNumber(-25), testCase.signed, Endianness.LittleEndian, 0);
                 }
             });
 
             it('parses big values correctly', () => {
                 let maxVal: bigint | number = 2n ** BigInt((parser.size * 8 - (testCase.signed ? 1 : 0) - 1));
-                test(parser, convertNumber(maxVal), testCase.signed, Endianness.LittleEndian, 0);
-                test(parser, convertNumber(maxVal - 1n), testCase.signed, Endianness.LittleEndian, 0);
+                testNumber(parser, convertNumber(maxVal), testCase.signed, Endianness.LittleEndian, 0);
+                testNumber(parser, convertNumber(maxVal - 1n), testCase.signed, Endianness.LittleEndian, 0);
             });
         });
     }
 
-    function test(parser: Parser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0) {
+    function testNumber(parser: NumberParser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0) {
+        if (endianness === Endianness.BigEndian)
+            parser = parser.bigEndian();
+        else
+            parser = parser.littleEndian();
+
         const buf = Buffer.alloc(parser.size + offset);
         for (let i = 0; i < offset; i++)
             buf.writeInt8(255, i);
