@@ -1,3 +1,4 @@
+require('./_index');
 import bParse from '../src/binaryParser';
 import { Parser, Endianness } from '../src/binaryParser/types';
 import { expect } from 'chai';
