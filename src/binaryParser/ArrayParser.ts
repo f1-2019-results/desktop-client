@@ -6,8 +6,8 @@ export default class ArrayParser extends Parser {
     private itemParsers: Array<Parser> = [];
 
     constructor(items: Array<Parser>) {
-        super();
-        this.itemParsers = items;
+        super()
+                this.itemParsers = items
         this.size = this.itemParsers.reduce((prev, parser) => prev + parser.size, 0);
     }
 
