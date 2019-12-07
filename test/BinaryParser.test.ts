@@ -36,33 +36,65 @@ describe('binaryParser', () => {
                 testNumber(parser, convertNumber(maxVal), testCase.signed, Endianness.LittleEndian, 0);
                 testNumber(parser, convertNumber(maxVal - 1n), testCase.signed, Endianness.LittleEndian, 0);
             });
+
+            it('Handles offset correctly', () => {
+                testNumber(parser, convertNumber(33), testCase.signed, Endianness.LittleEndian, 5);
+                testNumber(parser, convertNumber(33), testCase.signed, Endianness.LittleEndian, 5);
+            });
         });
     }
 
-    function testNumber(parser: NumberParser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0) {
-        if (endianness === Endianness.BigEndian)
-            parser = parser.bigEndian();
-        else
-            parser = parser.littleEndian();
+    describe('string parser', () => {
 
-        const buf = Buffer.alloc(parser.size + offset);
-        for (let i = 0; i < offset; i++)
-            buf.writeInt8(255, i);
-        let fnName = 'write'
-        if (parser.size > 4)
-            fnName += 'Big'
-        fnName += signed ? 'Int' : 'UInt';
-        fnName += parser.size * 8;
-        if (parser.size > 1)
-            fnName += endianness == Endianness.BigEndian ? 'BE' : 'LE';
-        // @ts-ignore
-        buf[fnName](num, offset);
-        const val = parser.parse(buf, offset);
-        expect(val).to.equal(num);
-    }
+        it('Parses simple string correctly', () => {
+            const parser = bParse.string().length(11);
+            parser.parse(Buffer.from('Lorem ipsum'))
+                .should.equal('Lorem ipsum');
+        });
 
-    function safeBigintToNumber(num: bigint) {
-        if (num > 2 ** 32)
-            return
-    }
+        it('Strips null characters correctly', () => {
+            const parser = bParse.string().length(21);
+            const buf = Buffer.concat([Buffer.from('Lorem ipsum'), Buffer.alloc(8), Buffer.from('aa')]);
+            parser.parse(buf)
+                .should.equal('Lorem ipsum');
+        });
+
+        it('Parses special characters correctly', () => {
+            const input = 'Ḽơᶉëᶆ ȋṕšᶙṁ 😡';
+            const buf = Buffer.from(input);
+            const parser = bParse.string().length(buf.length);
+            parser.parse(buf)
+                .should.equal(input);
+        });
+
+    });
+
 });
+
+function testNumber(parser: NumberParser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0) {
+    if (endianness === Endianness.BigEndian)
+        parser = parser.bigEndian();
+    else
+        parser = parser.littleEndian();
+
+    let buf = numberToBuffer(num, parser.size, signed, endianness);
+    const padding = Buffer.alloc(offset).fill(255);
+    buf = Buffer.concat([padding, buf, padding]);
+
+    const val = parser.parse(buf, offset);
+    expect(val).to.equal(num);
+}
+
+function numberToBuffer(num: number | bigint, size: number, signed: boolean, endianness: Endianness) {
+    const buf = Buffer.alloc(size);
+    let fnName = 'write'
+    if (size > 4)
+        fnName += 'Big'
+    fnName += signed ? 'Int' : 'UInt';
+    fnName += size * 8;
+    if (size > 1)
+        fnName += endianness == Endianness.BigEndian ? 'BE' : 'LE';
+    // @ts-ignore
+    buf[fnName](num, 0);
+    return buf;
+}

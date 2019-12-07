@@ -8,3 +8,6 @@
 BigInt.prototype.toJSON = function () {
     return this.toString();
 }
+
+import * as chai from 'chai';
+chai.should();
