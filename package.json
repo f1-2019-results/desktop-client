@@ -7,7 +7,7 @@
     "start": "ts-node ./src/index.ts",
     "build": "tsc --p ./tsconfig.json",
     "test": "mocha -r ts-node/register test/**/*.ts --exit",
-    "lint": "eslint ./src/**/*.ts",
+    "lint": "eslint .",
     "lintfix": "eslint . --fix",
     "coverage": "tsc && nyc --reporter=text --reporter=html --reporter=lcov mocha"
   },
