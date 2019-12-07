@@ -14,7 +14,7 @@ async function init(): Promise<void> {
 
     let raceStarted = false;
 
-    socket.on('message', (buf) => {
+            socket.on('message', (buf) => {
         const header = parseHeader(buf, 0);
         if (header.packetId === 3) {
             const event = buf.toString('utf8', HEADER_SIZE, HEADER_SIZE + 4);
