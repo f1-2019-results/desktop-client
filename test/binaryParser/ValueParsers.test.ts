@@ -19,27 +19,26 @@ for (const testCase of numberParsers) {
     describe(`${testCase.parserName} parser`, () => {
         // @ts-ignore
         const parser = bParse[testCase.parserName]() as NumberParser;
-        const convertNumber = (num: bigint | number) => parser.size <= 4 ? Number(num) : BigInt(num);
 
         it('parses small values correctly', () => {
-            testNumber(parser, convertNumber(0), testCase.signed, Endianness.LittleEndian, 0);
-            testNumber(parser, convertNumber(1), testCase.signed, Endianness.LittleEndian, 0);
-            testNumber(parser, convertNumber(25), testCase.signed, Endianness.LittleEndian, 0);
+            testNumber(parser, 0, testCase.signed, Endianness.LittleEndian, 0);
+            testNumber(parser, 1, testCase.signed, Endianness.LittleEndian, 0);
+            testNumber(parser, 25, testCase.signed, Endianness.LittleEndian, 0);
             if (testCase.signed) {
-                testNumber(parser, convertNumber(-1), testCase.signed, Endianness.LittleEndian, 0);
-                testNumber(parser, convertNumber(-25), testCase.signed, Endianness.LittleEndian, 0);
+                testNumber(parser, -1, testCase.signed, Endianness.LittleEndian, 0);
+                testNumber(parser, -25, testCase.signed, Endianness.LittleEndian, 0);
             }
         });
 
         it('parses big values correctly', () => {
             let maxVal: bigint | number = 2n ** BigInt((parser.size * 8 - (testCase.signed ? 1 : 0) - 1));
-            testNumber(parser, convertNumber(maxVal), testCase.signed, Endianness.LittleEndian, 0);
-            testNumber(parser, convertNumber(maxVal - 1n), testCase.signed, Endianness.LittleEndian, 0);
+            testNumber(parser, maxVal, testCase.signed, Endianness.LittleEndian, 0);
+            testNumber(parser, maxVal - 1n, testCase.signed, Endianness.LittleEndian, 0);
         });
 
         it('Handles offset correctly', () => {
-            testNumber(parser, convertNumber(33), testCase.signed, Endianness.LittleEndian, 5);
-            testNumber(parser, convertNumber(33), testCase.signed, Endianness.LittleEndian, 5);
+            testNumber(parser, 33, testCase.signed, Endianness.LittleEndian, 5);
+            testNumber(parser, 33, testCase.signed, Endianness.LittleEndian, 5);
         });
 
         it('Defaults to 0 offset', () => {
@@ -58,7 +57,7 @@ function testNumber(parser: NumberParser, num: bigint | number, signed: boolean,
         parser = parser.bigEndian();
     else
         parser = parser.littleEndian();
-
+    num = parser.size <= 4 ? Number(num) : BigInt(num);
     let buf = numberToBuffer(num, parser.size, signed, endianness);
     const padding = Buffer.alloc(offset).fill(255);
     buf = Buffer.concat([padding, buf, padding]);
@@ -68,7 +67,6 @@ function testNumber(parser: NumberParser, num: bigint | number, signed: boolean,
 }
 
 function numberToBuffer(num: number | bigint, size: number, signed: boolean, endianness: Endianness) {
-    num = size <= 4 ? Number(num) : BigInt(num);
     const buf = Buffer.alloc(size);
     let fnName = 'write'
     if (size > 4)
