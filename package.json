@@ -9,7 +9,7 @@
     "test": "mocha -r ts-node/register test/**/*.ts --exit",
     "lint": "eslint \"src/**/*.ts\"",
     "lintfix": "eslint \"src/**/*.ts\" --fix",
-    "coverage": "tsc && nyc --reporter=text --reporter=html --reporter=lcov mocha"
+    "coverage": "nyc --reporter=text --reporter=html --reporter=lcov mocha"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,6 @@
   "homepage": "https://github.com/FINDarkside/tobenamed-desktop-client#readme",
   "dependencies": {},
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@types/chai": "^4.2.6",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.11.7",
