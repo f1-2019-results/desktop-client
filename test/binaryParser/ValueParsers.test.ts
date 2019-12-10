@@ -15,6 +15,7 @@ const numberParsers = [
 ];
 
 for (const testCase of numberParsers) {
+
     describe(`${testCase.parserName} parser`, () => {
         // @ts-ignore
         const parser = bParse[testCase.parserName]() as NumberParser;
@@ -40,6 +41,15 @@ for (const testCase of numberParsers) {
             testNumber(parser, convertNumber(33), testCase.signed, Endianness.LittleEndian, 5);
             testNumber(parser, convertNumber(33), testCase.signed, Endianness.LittleEndian, 5);
         });
+
+        it('Defaults to 0 offset', () => {
+            const num = parser.size > 4 ? 100n : 100;
+            const buf = Buffer.concat([
+                numberToBuffer(num, parser.size, testCase.signed, Endianness.LittleEndian),
+                numberToBuffer(255, 1, false, Endianness.LittleEndian)
+            ]);
+            expect(parser.parse(buf)).to.eql(num);
+        });
     });
 }
 
@@ -58,6 +68,7 @@ function testNumber(parser: NumberParser, num: bigint | number, signed: boolean,
 }
 
 function numberToBuffer(num: number | bigint, size: number, signed: boolean, endianness: Endianness) {
+    num = size <= 4 ? Number(num) : BigInt(num);
     const buf = Buffer.alloc(size);
     let fnName = 'write'
     if (size > 4)
