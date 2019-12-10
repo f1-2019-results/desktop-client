@@ -13,6 +13,12 @@ async function init(): Promise<void> {
     const writeStream = fs.createWriteStream('./dump.bin');
 
     let raceStarted = false;
+    console.log('asd');
+    console.log('asd');
+    console.log('asd');
+    console.log('asd');
+    console.log('asd');
+    console.log('asd');
 
     socket.on('message', (buf) => {
         const header = parseHeader(buf, 0);
