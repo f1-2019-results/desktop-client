@@ -8,6 +8,6 @@ module.exports = {
         sourceType: "module"
     },
     rules: {
-
+        "@typescript-eslint/no-use-before-define": "off"
     }
 };
