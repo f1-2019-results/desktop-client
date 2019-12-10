@@ -1,7 +1,4 @@
-export enum Endianness {
-    LittleEndian,
-    BigEndian
-}
+import { Endianness } from './types';
 
 export interface DefaultOptions {
     endianness: Endianness;
