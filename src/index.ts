@@ -45,7 +45,7 @@ async function init(): Promise<void> {
 
 async function processDump(s: string) {
     const buf = await readFile(s);
-    let offset = 0;
+    const offset = 0;
     const result = {
         lapData: []
     };
