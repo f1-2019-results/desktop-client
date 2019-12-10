@@ -3,19 +3,21 @@ import { Parser } from './types';
 export default class ArrayParser extends Parser {
 
     public size: number;
-    private itemParsers: Array<Parser> = [];
+    private parser: Parser;
+    private length: number;
 
-    constructor(items: Array<Parser>) {
+    constructor(parser: Parser, length: number) {
         super();
-        this.itemParsers = items;
-        this.size = this.itemParsers.reduce((prev, parser) => prev + parser.size, 0);
+        this.length = length;
+        this.parser = parser;
+        this.size = parser.size * length;
     }
 
     parse(buf: Buffer, offset = 0) {
-        const result = Array(this.itemParsers.length);
-        for (const parser of this.itemParsers) {
-            result.push(parser.parse(buf, offset));
-            offset += parser.size;
+        const result = Array(this.length);
+        for (let i = 0; i < this.length; i++) {
+            result[i] = this.parser.parse(buf, offset);
+            offset += this.parser.size;
         }
         return result;
     }
