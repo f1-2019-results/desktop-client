@@ -38,10 +38,11 @@ for (const testCase of numberParsers) {
 
         it('Handles offset correctly', () => {
             testNumber(parser, 33, testCase.signed, Endianness.LittleEndian, 5);
-            testNumber(parser, 33, testCase.signed, Endianness.LittleEndian, 5);
+            testNumber(parser, 33, testCase.signed, Endianness.BigEndian, 5);
         });
 
         it('Defaults to 0 offset', () => {
+            parser.littleEndian();
             const num = parser.size > 4 ? 100n : 100;
             const buf = Buffer.concat([
                 numberToBuffer(num, parser.size, testCase.signed, Endianness.LittleEndian),

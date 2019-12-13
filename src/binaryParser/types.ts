@@ -26,15 +26,19 @@ export abstract class Parser {
 
 export abstract class NumberParser extends Parser {
 
-  protected endianness?: Endianness;
+  protected _endianness?: Endianness;
+
+  public get endianness() {
+    return this._endianness != null ? this._endianness : this.options.endianness;
+  }
 
   littleEndian() {
-    this.endianness = Endianness.LittleEndian;
+    this._endianness = Endianness.LittleEndian;
     return this;
   }
 
   bigEndian() {
-    this.endianness = Endianness.BigEndian;
+    this._endianness = Endianness.BigEndian;
     return this;
   }
 

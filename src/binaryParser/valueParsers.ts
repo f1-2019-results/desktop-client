@@ -20,7 +20,7 @@ export class Int16Parser extends NumberParser {
     size = 2;
 
     parse(buf: Buffer, offset = 0) {
-        if (this.options.endianness === Endianness.LittleEndian)
+        if (this.endianness === Endianness.LittleEndian)
             return buf.readInt16LE(offset);
         return buf.readInt16BE(offset);
     }
@@ -30,7 +30,7 @@ export class Uint16Parser extends NumberParser {
     size = 2;
 
     parse(buf: Buffer, offset = 0) {
-        if (this.options.endianness === Endianness.LittleEndian)
+        if (this.endianness === Endianness.LittleEndian)
             return buf.readUInt16LE(offset);
         return buf.readUInt16BE(offset);
     }
@@ -40,7 +40,7 @@ export class Int32Parser extends NumberParser {
     size = 4;
 
     parse(buf: Buffer, offset = 0) {
-        if (this.options.endianness === Endianness.LittleEndian)
+        if (this.endianness === Endianness.LittleEndian)
             return buf.readInt32LE(offset);
         return buf.readInt32BE(offset);
     }
@@ -50,7 +50,7 @@ export class Uint32Parser extends NumberParser {
     size = 4;
 
     parse(buf: Buffer, offset = 0) {
-        if (this.options.endianness === Endianness.LittleEndian)
+        if (this.endianness === Endianness.LittleEndian)
             return buf.readUInt32LE(offset);
         return buf.readUInt32BE(offset);
     }
@@ -60,7 +60,7 @@ export class Int64Parser extends NumberParser {
     size = 8;
 
     parse(buf: Buffer, offset = 0) {
-        if (this.options.endianness === Endianness.LittleEndian)
+        if (this.endianness === Endianness.LittleEndian)
             return buf.readBigInt64LE(offset);
         return buf.readBigInt64BE(offset);
     }
@@ -70,7 +70,6 @@ export class Uint64Parser extends NumberParser {
     size = 8;
 
     parse(buf: Buffer, offset = 0) {
-        const endianness = this.endianness
         if (this.endianness === Endianness.LittleEndian)
             return buf.readBigUInt64LE(offset);
         return buf.readBigUInt64BE(offset);
