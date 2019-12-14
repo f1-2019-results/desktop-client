@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import * as parsers from "./valueParsers";
-import ObjectParser from "./ObjectParser";
-import StringParser from "./StringParser";
-import ArrayParser from "./ArrayParser";
+import * as parsers from './valueParsers';
+import ObjectParser from './ObjectParser';
+import StringParser from './StringParser';
+import ArrayParser from './ArrayParser';
 
 function createFactoryFunction<A extends any[], R>(constructor: new (...args: A) => R): (...args: A) => R {
   return (...args) => new constructor(...args);

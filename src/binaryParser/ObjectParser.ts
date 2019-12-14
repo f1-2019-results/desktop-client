@@ -1,4 +1,4 @@
-import { Parser } from "./types";
+import { Parser } from './types';
 
 interface ObjectParserArg {
   [key: string]: Parser;
