@@ -1,10 +1,11 @@
 import * as parsers from "./valueParsers";
 import ObjectParser from "./ObjectParser";
 import ArrayParser from "./ArrayParser";
+import { Parser } from "./types";
 
 export default {
   object: (...args: ConstructorParameters<typeof ObjectParser>) => new ObjectParser(...args),
-  array: (...args: ConstructorParameters<typeof ArrayParser>) => new ArrayParser(...args),
+  array: <T extends Parser>(parser: T, length: number) => new ArrayParser(parser, length),
   int8: (...args: ConstructorParameters<typeof parsers.Int8Parser>) => new parsers.Int8Parser(...args),
   uint8: (...args: ConstructorParameters<typeof parsers.Uint8Parser>) => new parsers.Uint8Parser(...args),
   int16: (...args: ConstructorParameters<typeof parsers.Int16Parser>) => new parsers.Int16Parser(...args),

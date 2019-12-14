@@ -1,19 +1,19 @@
 import { Parser } from './types';
 
-export default class ArrayParser extends Parser {
+export default class ArrayParser<T extends Parser> extends Parser {
 
     public size: number;
-    private parser: Parser;
+    private parser: T;
     private length: number;
 
-    constructor(parser: Parser, length: number) {
+    constructor(parser: T, length: number) {
         super();
         this.length = length;
         this.parser = parser;
         this.size = parser.size * length;
     }
 
-    parse(buf: Buffer, offset = 0) {
+    parse(buf: Buffer, offset = 0): Array<ReturnType<T['parse']>> {
         const result = Array(this.length);
         for (let i = 0; i < this.length; i++) {
             result[i] = this.parser.parse(buf, offset);
