@@ -17,7 +17,7 @@ export abstract class Parser {
   abstract parse(buf: Buffer, offset?: number): any;
   protected options = defaultOptions;
 
-  defaultOptions(options: Partial<DefaultOptions>) {
+  defaultOptions(options: Partial<DefaultOptions>): this {
     Object.assign(this.options, options);
     return this;
   }
@@ -28,16 +28,16 @@ export abstract class NumberParser extends Parser {
 
   protected _endianness?: Endianness;
 
-  public get endianness() {
+  public get endianness(): Endianness {
     return this._endianness != null ? this._endianness : this.options.endianness;
   }
 
-  littleEndian() {
+  littleEndian(): this {
     this._endianness = Endianness.LittleEndian;
     return this;
   }
 
-  bigEndian() {
+  bigEndian(): this {
     this._endianness = Endianness.BigEndian;
     return this;
   }

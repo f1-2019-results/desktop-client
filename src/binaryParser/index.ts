@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import * as parsers from "./valueParsers";
 import ObjectParser from "./ObjectParser";
 import ArrayParser from "./ArrayParser";

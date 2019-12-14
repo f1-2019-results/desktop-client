@@ -1,7 +1,7 @@
 import { Parser } from "./types";
 
 interface ObjectParserArg {
-  [key: string]: Parser
+  [key: string]: Parser;
 };
 
 type ObjectParserReturnType<T extends ObjectParserArg> = {
