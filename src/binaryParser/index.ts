@@ -3,9 +3,13 @@ import ObjectParser from "./ObjectParser";
 import ArrayParser from "./ArrayParser";
 import { Parser } from "./types";
 
+function createFactoryFunction<A extends any[], R>(constructor: new (...args: A) => R): (...args: A) => R {
+  return (...args) => new constructor(...args);
+}
+
 export default {
   object: (...args: ConstructorParameters<typeof ObjectParser>) => new ObjectParser(...args),
-  array: <T extends Parser>(parser: T, length: number) => new ArrayParser(parser, length),
+  array: createFactoryFunction(ArrayParser),
   int8: (...args: ConstructorParameters<typeof parsers.Int8Parser>) => new parsers.Int8Parser(...args),
   uint8: (...args: ConstructorParameters<typeof parsers.Uint8Parser>) => new parsers.Uint8Parser(...args),
   int16: (...args: ConstructorParameters<typeof parsers.Int16Parser>) => new parsers.Int16Parser(...args),
