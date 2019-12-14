@@ -1,14 +1,13 @@
 import * as parsers from "./valueParsers";
 import ObjectParser from "./ObjectParser";
 import ArrayParser from "./ArrayParser";
-import { Parser } from "./types";
 
 function createFactoryFunction<A extends any[], R>(constructor: new (...args: A) => R): (...args: A) => R {
   return (...args) => new constructor(...args);
 }
 
 export default {
-  object: (...args: ConstructorParameters<typeof ObjectParser>) => new ObjectParser(...args),
+  object: createFactoryFunction(ObjectParser),
   array: createFactoryFunction(ArrayParser),
   int8: (...args: ConstructorParameters<typeof parsers.Int8Parser>) => new parsers.Int8Parser(...args),
   uint8: (...args: ConstructorParameters<typeof parsers.Uint8Parser>) => new parsers.Uint8Parser(...args),
