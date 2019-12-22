@@ -45,3 +45,8 @@ const parser = bParse.object({
 export function parse(buf: Buffer, offset = 0): MotionData {
     return parser.parse(buf, offset);
 }
+
+export default {
+    parse,
+    size: parser.size,
+};

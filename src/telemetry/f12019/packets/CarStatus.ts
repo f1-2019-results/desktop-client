@@ -38,10 +38,13 @@ const carStatusParser = bParse.object({
     })
 });
 
-const parser = bParse.object({
-    carStatus: bParse.array(carStatusParser, 20),
-});
+const parser = bParse.array(carStatusParser, 20);
 
 export function parse(buf: Buffer, offset = 0): CarStatusData {
     return parser.parse(buf, offset);
 }
+
+export default {
+    parse,
+    size: parser.size,
+};

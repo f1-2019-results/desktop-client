@@ -15,3 +15,8 @@ const parser = bParse.object({
 export function parse(buf: Buffer, offset = 0): EventData {
     return parser.parse(buf, offset);
 }
+
+export default {
+    parse,
+    size: parser.size,
+};

@@ -22,10 +22,13 @@ const lapDataParser = bParse.object({
     resultStatus: bParse.uint8(),
 });
 
-const parser = bParse.object({
-    lapData: bParse.array(lapDataParser, 20),
-});
+const parser = bParse.array(lapDataParser, 20);
 
 export function parse(buf: Buffer, offset = 0): LapData {
     return parser.parse(buf, offset);
 }
+
+export default {
+    parse,
+    size: parser.size,
+};

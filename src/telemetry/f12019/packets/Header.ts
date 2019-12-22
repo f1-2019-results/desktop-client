@@ -17,3 +17,8 @@ const parser = bParse.object({
 export function parse(buf: Buffer, offset = 0): PacketHeader {
     return parser.parse(buf, offset);
 }
+
+export default {
+    parse,
+    size: parser.size,
+};

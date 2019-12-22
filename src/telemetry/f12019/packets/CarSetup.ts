@@ -25,10 +25,13 @@ const carSetupDataparser = bParse.object({
     fuelLoad: bParse.float(),
 });
 
-const parser = bParse.object({
-    carSetups: bParse.array(carSetupDataparser, 20),
-});
+const parser = bParse.array(carSetupDataparser, 20);
 
 export function parse(buf: Buffer, offset = 0): CarSetupPacket {
     return parser.parse(buf, offset);
 }
+
+export default {
+    parse,
+    size: parser.size,
+};

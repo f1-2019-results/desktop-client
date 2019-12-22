@@ -1,4 +1,4 @@
-export enum PacketId {
+enum PacketId {
     Motion = 0,
     Session = 1,
     LapData = 2,
@@ -8,3 +8,5 @@ export enum PacketId {
     CarTelemetry = 6,
     CarStatus = 7,
 }
+
+export default PacketId;
