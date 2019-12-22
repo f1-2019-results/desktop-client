@@ -56,8 +56,4 @@ async function processDump(s: string) {
     fs.writeFileSync('./dump.json', JSON.stringify(result));
 }
 
-init()
-    .catch((err) => {
-        console.error(err);
-        process.exit(1);
-    });
+init();

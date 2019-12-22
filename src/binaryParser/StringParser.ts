@@ -3,7 +3,7 @@ import { Parser } from './types';
 export interface StringParserOptions {
     encoding?: string;
     trim?: boolean;
-};
+}
 
 export default class StringParser extends Parser {
 
