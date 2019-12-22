@@ -16,4 +16,7 @@ describe('Binary parser', () => {
     require('./binaryParser/IntegerParsers.test');
     require('./binaryParser/ObjectParser.test');
     require('./binaryParser/StringParser.test');
+    require('./binaryParser/FloatParsers.test');
+    require('./binaryParser/BooleanParser.test');
+    require('./binaryParser/ArrayParser.test');
 });

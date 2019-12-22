@@ -23,4 +23,5 @@ export default {
   uint64: createFactoryFunction(parsers.Uint64Parser),
   float: createFactoryFunction(parsers.FloatParser),
   double: createFactoryFunction(parsers.DoubleParser),
+  boolean: createFactoryFunction(parsers.BooleanParser),
 };

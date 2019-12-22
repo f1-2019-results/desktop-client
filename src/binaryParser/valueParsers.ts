@@ -95,3 +95,11 @@ export class DoubleParser extends NumberParser {
         return buf.readDoubleBE(offset);
     }
 }
+
+export class BooleanParser extends NumberParser {
+    size = 1;
+
+    parse(buf: Buffer, offset = 0): boolean {
+        return buf.readUInt8(offset) !== 0;
+    }
+}
