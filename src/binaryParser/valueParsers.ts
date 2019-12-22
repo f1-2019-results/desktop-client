@@ -75,3 +75,23 @@ export class Uint64Parser extends NumberParser {
         return buf.readBigUInt64BE(offset);
     }
 }
+
+export class FloatParser extends NumberParser {
+    size = 4;
+
+    parse(buf: Buffer, offset = 0): number {
+        if (this.endianness === Endianness.LittleEndian)
+            return buf.readFloatLE(offset);
+        return buf.readFloatBE(offset);
+    }
+}
+
+export class DoubleParser extends NumberParser {
+    size = 8;
+
+    parse(buf: Buffer, offset = 0): number {
+        if (this.endianness === Endianness.LittleEndian)
+            return buf.readDoubleLE(offset);
+        return buf.readDoubleBE(offset);
+    }
+}
