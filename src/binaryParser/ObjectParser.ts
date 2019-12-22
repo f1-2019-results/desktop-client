@@ -2,7 +2,7 @@ import { Parser } from './types';
 
 interface ObjectParserArg {
   [key: string]: Parser;
-};
+}
 
 type ObjectParserReturnType<T extends ObjectParserArg> = {
   [key in keyof T]: ReturnType<T[key]['parse']>;

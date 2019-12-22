@@ -8,7 +8,7 @@ const port = 20777;
 
 const HEADER_SIZE = 23;
 
-async function init(): Promise<void> {
+function init(): void {
     const socket = dgram.createSocket('udp4');
     const writeStream = fs.createWriteStream('./dump.bin');
 

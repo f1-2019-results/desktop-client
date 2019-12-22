@@ -3,7 +3,7 @@ import { Parser } from './types';
 export interface StringParserOptions {
     encoding?: string;
     trim?: boolean;
-}
+};
 
 export default class StringParser extends Parser {
 
@@ -16,7 +16,7 @@ export default class StringParser extends Parser {
             throw new Error('Variable size String not implemented');
 
         let s = buf.toString(encoding || 'utf8', offset, offset + this.size);
-        if (s.indexOf('\0') !== -1)
+        if (s.includes('\0'))
             s = s.substring(0, s.indexOf('\0'));
         return s;
     }
