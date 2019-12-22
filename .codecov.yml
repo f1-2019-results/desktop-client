@@ -3,8 +3,8 @@ coverage:
     project:
       default:
         # basic
-        target: "0%"
-        threshold: "100%"
+        target: 0
+        threshold: 100
         base: auto 
         flags: null
         paths: null
@@ -14,3 +14,18 @@ coverage:
         if_ci_failed: error
         informational: False
         only_pulls: false
+    patch: 
+      patch:
+      default:
+      # basic
+      target: 0
+      threshold: 100
+      base: auto 
+      # advanced
+      branches: null
+      if_no_uploads: error
+      if_not_found: success
+      if_ci_failed: error
+      only_pulls: false
+      flags: null
+      paths: null
