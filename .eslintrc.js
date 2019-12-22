@@ -18,6 +18,7 @@ module.exports = {
     rules: {
         '@typescript-eslint/no-use-before-define': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/ban-ts-ignore': 'off',
         'quotes': ['error', 'single'],
     }
 };

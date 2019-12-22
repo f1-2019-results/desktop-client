@@ -31,7 +31,7 @@ for (const testCase of numberParsers) {
         });
 
         it('parses big values correctly', () => {
-            let maxVal: bigint | number = 2n ** BigInt((parser.size * 8 - (testCase.signed ? 1 : 0) - 1));
+            const maxVal: bigint | number = 2n ** BigInt((parser.size * 8 - (testCase.signed ? 1 : 0) - 1));
             testNumber(parser, maxVal, testCase.signed, Endianness.LittleEndian, 0);
             testNumber(parser, maxVal - 1n, testCase.signed, Endianness.LittleEndian, 0);
         });
@@ -53,7 +53,7 @@ for (const testCase of numberParsers) {
     });
 }
 
-function testNumber(parser: NumberParser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0) {
+function testNumber(parser: NumberParser, num: bigint | number, signed: boolean, endianness: Endianness, offset = 0): void {
     if (endianness === Endianness.BigEndian)
         parser = parser.bigEndian();
     else
