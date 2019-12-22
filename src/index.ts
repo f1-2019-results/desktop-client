@@ -1,7 +1,8 @@
 import * as dgram from 'dgram';
 import * as fs from 'fs';
 import * as util from 'util';
-import { parseHeader } from './parseDump';
+import { Header } from './telemetry/f12019/packets';
+import parseDump from './telemetry/f12019/parseDump';
 const readFile = util.promisify(fs.readFile);
 
 const port = 20777;
@@ -15,7 +16,7 @@ function init(): void {
     let raceStarted = false;
 
     socket.on('message', (buf) => {
-        const header = parseHeader(buf, 0);
+        const header = Header.parse(buf, 0);
         if (header.packetId === 3) {
             const event = buf.toString('utf8', HEADER_SIZE, HEADER_SIZE + 4);
             if (event === 'SSTA') {
@@ -30,10 +31,8 @@ function init(): void {
                 writeStream.close();
             }
         }
-        if ([1, 2, 3, 4].includes(header.packetId)) {
-            if (raceStarted)
-                writeStream.write(buf);
-        }
+        if (raceStarted)
+            writeStream.write(buf);
     });
 
     socket.on('listening', () => {
@@ -45,15 +44,8 @@ function init(): void {
 
 async function processDump(s: string) {
     const buf = await readFile(s);
-    const offset = 0;
-    const result = {
-        lapData: []
-    };
-    while (offset < buf.length) {
-        const header = parseHeader(buf, offset);
-
-    }
-    fs.writeFileSync('./dump.json', JSON.stringify(result));
+    const raceData = parseDump(buf);
+    fs.writeFileSync('./dump.json', JSON.stringify(raceData));
 }
 
-init();
+processDump('./dump3.bin');

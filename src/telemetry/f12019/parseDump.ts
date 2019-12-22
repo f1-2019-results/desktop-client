@@ -50,7 +50,7 @@ export default function parseDump(buf: Buffer): RaceData {
             }
         } else if (header.packetId === PacketId.Participants) {
             if (!result.participants.length) {
-                result.participants = packets.Participants.parse(buf, offset + HEADER_SIZE).participants;
+                result.participants = packets.Participants.parse(buf, offset + packets.Header.size).participants;
                 // Fill driver ids in case participants message is after first lap has finished (shouldn't be possible)
                 if (result.lapData) {
                     for (const lapData of result.lapData) {
