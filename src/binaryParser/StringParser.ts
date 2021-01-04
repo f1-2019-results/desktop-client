@@ -8,7 +8,7 @@ export interface StringParserOptions {
 export default class StringParser extends Parser {
 
     size = -1;
-    private _encoding?: string;
+    private _encoding?: BufferEncoding;
 
     parse(buf: Buffer, offset = 0): string {
         const encoding = this._encoding || this.options.stringEncoding;
@@ -26,7 +26,7 @@ export default class StringParser extends Parser {
         return this;
     }
 
-    encoding(s: string): this {
+    encoding(s: BufferEncoding): this {
         this._encoding = s;
         return this;
     }

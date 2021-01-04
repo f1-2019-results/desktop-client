@@ -2,7 +2,7 @@ import { Endianness } from './types';
 
 export interface DefaultOptions {
     endianness: Endianness;
-    stringEncoding: string;
+    stringEncoding: BufferEncoding;
     trimStrings: boolean;
 }
 
