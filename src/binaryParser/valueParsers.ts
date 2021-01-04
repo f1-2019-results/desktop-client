@@ -1,4 +1,4 @@
-import { NumberParser, Endianness, Parser } from './types';
+import { NumberParser, Endianness } from './types';
 
 export class Int8Parser extends NumberParser {
     size = 1;

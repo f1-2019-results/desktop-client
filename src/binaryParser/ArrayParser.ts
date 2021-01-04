@@ -14,9 +14,9 @@ export default class ArrayParser<T extends Parser> extends Parser {
     }
 
     parse(buf: Buffer, offset = 0): Array<ReturnType<T['parse']>> {
-        const result = Array(this.length);
+        const result = Array(this.length) as Array<ReturnType<T['parse']>>;
         for (let i = 0; i < this.length; i++) {
-            result[i] = this.parser.parse(buf, offset);
+            result[i] = this.parser.parse(buf, offset) as ReturnType<T['parse']>;
             offset += this.parser.size;
         }
         return result;

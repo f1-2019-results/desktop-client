@@ -48,4 +48,4 @@ async function processDump(s: string) {
     fs.writeFileSync('./dump.json', JSON.stringify(raceData));
 }
 
-processDump('./dump3.bin');
+void processDump('./dump3.bin');

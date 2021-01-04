@@ -20,8 +20,9 @@ export default class ObjectParser<T extends ObjectParserArg> extends Parser {
   }
 
   parse(buf: Buffer, offset = 0): ObjectParserReturnType<T> {
-    const result = {} as any;
+    const result = {} as { [key: string]: any };
     for (const [key, parser] of this.fields) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       result[key] = parser.parse(buf, offset);
       offset += parser.size;
     }
