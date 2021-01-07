@@ -60,9 +60,9 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                     lastLapNum[i] = data.currentLapNum;
                 }
                 const currentLap = laps[data.currentLapNum - 1];
-                if (data.sector > 1)
+                if (data.sector > 0)
                     currentLap.sectors[0] = data.sector1Time;
-                if (data.sector > 2)
+                if (data.sector > 1)
                     currentLap.sectors[1] = data.sector2Time;
                 if (data.currentLapInvalid)
                     currentLap.invalid = true;
