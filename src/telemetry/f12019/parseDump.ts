@@ -1,4 +1,3 @@
-import { RaceData } from '../../raceData';
 import { NewRaceBody } from '../../services/raceService';
 import PacketId from './packetId';
 import * as packets from './packets';
@@ -8,33 +7,42 @@ const packetSizes = [
     1343, 149, 843, 32, 1104, 843, 1347, 1143
 ];
 
-export function parseDump(buf: Buffer): NewRaceBody {
+export default function parseDump(buf: Buffer): NewRaceBody {
     let offset = 0;
     const race: RecursivePartial<NewRaceBody> = {
         game: 'F1 2019',
-        results: [],
+        results: Array.from({ length: 20 }, () => ({ laps: [] })),
+        // TODO: Capture when recording??
+        startTime: new Date().toISOString(),
     };
     const lastLapNum = new Array(20).fill(0);
 
     while (offset < buf.length) {
         const header = packets.Header.parse(buf, offset);
 
-        // TODO: Participants packet is expected to come before LapData packet, check if this is always the case.
+        // First participants packet is not always before the first lapData packet.
         if (header.packetId === PacketId.Participants) {
             if (!race.results) {
                 const participants = packets.Participants.parse(buf, offset + packets.Header.size).participants;
-                race.results = participants.map(p => ({
-                    driverId: p.driverId.toString(),
-                    driverName: p.name,
-                    isAi: p.aiControlled,
-                    laps: [],
-                }))
+                participants.forEach((p, i) => {
+                    const result = (race.results as NewRaceBody['results'])[i];
+                    result.driverId = p.driverId.toString();
+                    result.driverName = p.name;
+                    result.isAi = p.aiControlled;
+                });
             }
+        } else if (header.packetId === PacketId.Session) {
+            const session = packets.Session.parse(buf, offset + packets.Header.size);
+            race.trackId = session.trackId.toString();
         } else if (header.packetId === PacketId.LapData) {
             const lapData = packets.Lap.parse(buf, offset + packets.Header.size);
             for (let i = 0; i < lapData.length; i++) {
                 const data = lapData[i];
-                const laps = (race.results as NewRaceBody['results'])[i].laps;
+                const result = (race.results as NewRaceBody['results'])[i];
+                const laps = result.laps;
+
+                if (!result.startPosition)
+                    result.startPosition = data.gridPosition;
                 if (laps.length < data.currentLapNum) {
                     laps.push({
                         position: -1,
