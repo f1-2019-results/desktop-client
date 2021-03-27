@@ -7,6 +7,8 @@ const packetSizes = [
     1343, 149, 843, 32, 1104, 843, 1347, 1143
 ];
 
+const pointDistribution = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
+
 export default function parseDump(buf: Buffer): NewRaceBody {
     let offset = 0;
     const race: RecursivePartial<NewRaceBody> = {
@@ -24,15 +26,13 @@ export default function parseDump(buf: Buffer): NewRaceBody {
 
         // First participants packet is not always before the first lapData packet.
         if (header.packetId === PacketId.Participants) {
-            if (!race.results) {
-                const participants = packets.Participants.parse(buf, offset + packets.Header.size).participants;
-                participants.forEach((p, i) => {
-                    const result = (race.results as NewRaceBody['results'])[i];
-                    result.driverId = p.driverId.toString();
-                    result.driverName = p.name;
-                    result.isAi = p.aiControlled;
-                });
-            }
+            const participants = packets.Participants.parse(buf, offset + packets.Header.size).participants;
+            participants.forEach((p, i) => {
+                const result = (race.results as NewRaceBody['results'])[i];
+                // result.driverId = p.driverId.toString();
+                result.driverName = p.name;
+                result.isAi = p.aiControlled;
+            });
         } else if (header.packetId === PacketId.Session) {
             const session = packets.Session.parse(buf, offset + packets.Header.size);
             race.trackId = session.trackId.toString();
@@ -75,6 +75,11 @@ export default function parseDump(buf: Buffer): NewRaceBody {
             }
         }
         offset += packetSizes[header.packetId];
+    }
+
+    for (const result of race.results) {
+        result.position = result.laps[result.laps?.length - 1].position;
+        result.points = pointDistribution[result.position - 1] || 0;
     }
 
     return race as NewRaceBody;

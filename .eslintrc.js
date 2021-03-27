@@ -19,6 +19,8 @@ module.exports = {
         '@typescript-eslint/no-use-before-define': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/ban-ts-ignore': 'off',
+        // Doesn't seem to work, compains when assigned type is number
+        '@typescript-eslint/no-unsafe-assignment': 'off',
         'quotes': ['error', 'single'],
     }
 };

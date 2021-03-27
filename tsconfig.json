@@ -5,7 +5,8 @@
         "moduleResolution": "node",
         "baseUrl": "src",
         "outDir": "build",
-        "strict": true
+        "strict": true,
+        "strictNullChecks": false
     },
     "include": [
         "src/**/*.ts",
