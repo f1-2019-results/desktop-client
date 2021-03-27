@@ -1,6 +1,7 @@
 import * as dgram from 'dgram';
 import * as fs from 'fs';
 import * as util from 'util';
+import got from 'got';
 import { Header } from './telemetry/f12019/packets';
 import parseDump from './telemetry/f12019/parseDump';
 const readFile = util.promisify(fs.readFile);
@@ -46,6 +47,12 @@ async function processDump(s: string) {
     const buf = await readFile(s);
     const raceData = parseDump(buf);
     fs.writeFileSync('./dump.json', JSON.stringify(raceData));
+    const { body } = await got.post('http://localhost:3000/race', {
+        json: raceData,
+        responseType: 'json',
+    });
+    console.log(body)
 }
 
-void processDump('./dump3.bin');
+void processDump('./dump5.bin');
+//init()
