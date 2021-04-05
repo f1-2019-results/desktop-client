@@ -21,6 +21,7 @@ module.exports = {
         '@typescript-eslint/ban-ts-ignore': 'off',
         // Doesn't seem to work, compains when assigned type is number
         '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
         'quotes': ['error', 'single'],
     }
 };

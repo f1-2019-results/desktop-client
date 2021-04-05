@@ -1,7 +1,12 @@
+import got from 'got'
+import { apiUrl } from '../index'
 
-export function addRace(race: NewRaceBody): Promise<number> {
-    // TODO:
-    return Promise.resolve(0)
+export async function createRace(race: NewRaceBody): Promise<string> {
+    const { body } = await got.post(apiUrl + '/race', {
+        json: race,
+        responseType: 'json',
+    })
+    return (body as any).uid as string
 }
 
 export interface Race {
