@@ -7,6 +7,7 @@ import { createRace } from './services/raceService';
 const readFile = util.promisify(fs.readFile);
 
 export const apiUrl = 'https://f1-results.herokuapp.com';
+export const frontendUrl = 'https://f1-2019-results.github.io/#';
 //export const apiUrl = 'http://localhost:3000';
 
 const port = 20777;
@@ -54,8 +55,9 @@ function init(): void {
 async function processDump(s: string) {
     const buf = await readFile(s);
     const raceData = parseDump(buf);
+    //fs.writeFileSync(s + '.json', JSON.stringify(raceData, null, 2))
     const id = await createRace(raceData)
-    console.log(`Race results available at ${apiUrl}/race/${id}`)
+    console.log(`Race results available at ${frontendUrl}/race/${id}`)
 }
 
 init()
