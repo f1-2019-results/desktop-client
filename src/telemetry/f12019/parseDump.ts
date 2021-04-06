@@ -44,7 +44,6 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                 const result = (race.results as NewRaceBody['results'])[i];
                 const laps = result.laps;
 
-
                 if (!result.startPosition)
                     result.startPosition = data.gridPosition;
 
@@ -61,7 +60,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                     const lastLap = laps[data.currentLapNum - 2];
                     const sectorTimeSum = lastLap.sectors.reduce((a, b) => a + b);
                     // Telemetry only contains fields for sector 1 and sector 2 times. 
-                    lastLap.sectors.push(data.lastLapTime - sectorTimeSum);
+                    lastLap.sectors[2] = data.lastLapTime - sectorTimeSum;
                     lastLap.position = data.carPosition;
                     lastLapNum[i] = data.currentLapNum;
                 }
@@ -69,8 +68,15 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                     const currentLap = laps[data.currentLapNum - 1];
                     if (data.sector > 0)
                         currentLap.sectors[0] = data.sector1Time;
-                    if (data.sector > 1)
+                    if (data.sector > 1) {
                         currentLap.sectors[1] = data.sector2Time;
+                        // It seems like packet from the "cooldown" lap is not always included, leaving last lap unfinished
+                        // It's also possible that there's still packets after race end event, but atm recording stops there
+                        // So fill in to make sure sector and 
+                        // FIXME: This will lead to incorrect (too small) lap time though
+                        currentLap.sectors[2] = data.currentLapTime - currentLap.sectors[0] - currentLap.sectors[1]
+                        currentLap.position = data.carPosition
+                    }
                     if (data.currentLapInvalid)
                         currentLap.invalid = true;
                 }
@@ -80,7 +86,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
     }
 
     for (const result of race.results) {
-        result.position = result.laps[result.laps?.length - 1].position;
+        result.position = result.laps[totalLaps - 1].position;
         result.points = pointDistribution[result.position - 1] || 0;
     }
 
