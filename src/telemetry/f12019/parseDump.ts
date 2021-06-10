@@ -45,7 +45,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                 const laps = result.laps;
 
                 if (!result.startPosition)
-                    result.startPosition = data.gridPosition;
+                    result.startPosition = data.gridPosition + 1;
 
                 // Don't add new lap if driver has finished race
                 if (laps.length < data.currentLapNum && data.currentLapNum <= totalLaps) {
