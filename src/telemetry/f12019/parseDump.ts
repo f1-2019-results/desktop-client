@@ -111,6 +111,15 @@ export default function parseDump(buf: Buffer): NewRaceBody {
         driver.laps[driver.laps.length - 1].position = driver.position;
     })
 
+    // FIXME: #8 Copy sector times of last full laps when lap is incomplete
+    // Doesn't work when driver was on last sector. Must be filled in way that
+    // gaps to leader make sense.
+    race.results.forEach((result, i) => {
+        const lastLap = result.laps[result.laps.length - 1];
+        if (lastLap && lastLap.sectors.length !== 2)
+            lastLap.sectors = result.laps[result.laps.length - 2].sectors;
+    })
+
     return race as NewRaceBody;
 }
 
