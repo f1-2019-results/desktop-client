@@ -58,7 +58,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                 // Fill sector times and position when lap has changed
                 if (data.currentLapNum > 1 && lastLapNum[i] < data.currentLapNum) {
                     const lastLap = laps[data.currentLapNum - 2];
-                    const sectorTimeSum = lastLap.sectors.reduce((a, b) => a + b);
+                    const sectorTimeSum = lastLap.sectors[0] + lastLap.sectors[1];
                     // Telemetry only contains fields for sector 1 and sector 2 times. 
                     lastLap.sectors[2] = data.lastLapTime - sectorTimeSum;
                     lastLap.position = data.carPosition;
