@@ -15,6 +15,7 @@ export interface Race {
     game: string,
     results: Array<{
         driverId: string
+        teamId: number
         driverName: string
         isAi: boolean
         startPosition: number

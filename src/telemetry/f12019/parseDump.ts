@@ -32,6 +32,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                 // result.driverId = p.driverId.toString();
                 result.driverName = p.name;
                 result.isAi = p.aiControlled;
+                result.teamId = p.teamId;
             });
         } else if (header.packetId === PacketId.Session) {
             const session = packets.Session.parse(buf, offset + packets.Header.size);
