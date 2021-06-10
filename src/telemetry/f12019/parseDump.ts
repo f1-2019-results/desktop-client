@@ -20,6 +20,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
     const lastLapNum = new Array(20).fill(0);
     // This will be changed to real number before second lap packets come in
     let totalLaps = 1;
+    let raceFinished = false;
 
     while (offset < buf.length) {
         const header = packets.Header.parse(buf, offset);
@@ -45,11 +46,15 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                 const result = (race.results as NewRaceBody['results'])[i];
                 const laps = result.laps;
 
+                if (data.resultStatus === 3)
+                    raceFinished = true;
+
                 if (!result.startPosition)
                     result.startPosition = data.gridPosition + 1;
 
                 // Don't add new lap if driver has finished race
-                if (laps.length < data.currentLapNum && data.currentLapNum <= totalLaps && data.resultStatus === 2) {
+                // Not sure why data.resultStatus === 2 is not enough, so added !raceFinished
+                if (laps.length < data.currentLapNum && data.resultStatus === 2 && !raceFinished) {
                     laps.push({
                         position: data.carPosition,
                         sectors: [],
@@ -73,7 +78,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                         currentLap.sectors[1] = data.sector2Time;
                         // It seems like packet from the "cooldown" lap is not always included, leaving last lap unfinished
                         // It's also possible that there's still packets after race end event, but atm recording stops there
-                        // So fill in to make sure sector and 
+                        // So fill in to make sure sector and position make sense
                         // FIXME: This will lead to incorrect (too small) lap time though
                         currentLap.sectors[2] = data.currentLapTime - currentLap.sectors[0] - currentLap.sectors[1]
                         currentLap.position = data.carPosition
@@ -94,10 +99,11 @@ export default function parseDump(buf: Buffer): NewRaceBody {
         result.points = pointDistribution[result.position - 1] || 0;
     }
     const driversWithoutAllLaps = race.results.filter(result => !result.laps[totalLaps - 1])
+
     driversWithoutAllLaps
         .sort((a, b) => lastLapPosition(b) - lastLapPosition(a))
         .sort((a, b) => a.laps.length - b.laps.length)
-    
+
     driversWithoutAllLaps.forEach((driver, i) => {
         driver.position = 20 - i;
         driver.points = pointDistribution[driver.position - 1] || 0;
