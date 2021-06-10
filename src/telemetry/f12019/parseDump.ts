@@ -49,9 +49,9 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                     result.startPosition = data.gridPosition + 1;
 
                 // Don't add new lap if driver has finished race
-                if (laps.length < data.currentLapNum && data.currentLapNum <= totalLaps) {
+                if (laps.length < data.currentLapNum && data.currentLapNum <= totalLaps && data.resultStatus === 2) {
                     laps.push({
-                        position: -1,
+                        position: data.carPosition,
                         sectors: [],
                         invalid: false,
                     })
@@ -65,7 +65,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                     lastLap.position = data.carPosition;
                     lastLapNum[i] = data.currentLapNum;
                 }
-                if (data.currentLapNum <= totalLaps) {
+                if (data.currentLapNum <= totalLaps && data.resultStatus === 2) {
                     const currentLap = laps[data.currentLapNum - 1];
                     if (data.sector > 0)
                         currentLap.sectors[0] = data.sector1Time;
@@ -86,10 +86,24 @@ export default function parseDump(buf: Buffer): NewRaceBody {
         offset += packetSizes[header.packetId];
     }
 
+    const lastLapPosition = (result: RecursivePartial<NewRaceBody['results'][0]>) => result.laps[result.laps.length - 1].position;
+
     for (const result of race.results) {
-        result.position = result.laps[totalLaps - 1].position;
+        if (result.laps[totalLaps - 1])
+            result.position = result.laps[totalLaps - 1].position;
         result.points = pointDistribution[result.position - 1] || 0;
     }
+    const driversWithoutAllLaps = race.results.filter(result => !result.laps[totalLaps - 1])
+    driversWithoutAllLaps
+        .sort((a, b) => lastLapPosition(b) - lastLapPosition(a))
+        .sort((a, b) => a.laps.length - b.laps.length)
+    
+    driversWithoutAllLaps.forEach((driver, i) => {
+        driver.position = 20 - i;
+        driver.points = pointDistribution[driver.position - 1] || 0;
+        // Last lap might be incomplete so set final position to it
+        driver.laps[driver.laps.length - 1].position = driver.position;
+    })
 
     return race as NewRaceBody;
 }
