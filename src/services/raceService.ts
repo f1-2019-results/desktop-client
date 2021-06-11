@@ -18,6 +18,7 @@ export interface Race {
         teamId: number
         driverName: string
         isAi: boolean
+        dnf: boolean
         startPosition: number
         position: number
         points: number

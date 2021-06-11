@@ -48,6 +48,8 @@ export default function parseDump(buf: Buffer): NewRaceBody {
 
                 if (data.resultStatus === 3)
                     raceFinished = true;
+                else if (data.resultStatus === 6)
+                    result.dnf = true;
 
                 if (!result.startPosition)
                     result.startPosition = data.gridPosition + 1;
