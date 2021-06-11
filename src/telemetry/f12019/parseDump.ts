@@ -61,6 +61,7 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                         position: data.carPosition,
                         sectors: [],
                         invalid: false,
+                        pit: false,
                     })
                 }
                 // Fill sector times and position when lap has changed
@@ -87,6 +88,9 @@ export default function parseDump(buf: Buffer): NewRaceBody {
                     }
                     if (data.currentLapInvalid)
                         currentLap.invalid = true;
+                    if (data.pitStatus === 1 && data.currentLapTime < 10) {
+                        currentLap.pit = true;
+                    }
                 }
             }
         }

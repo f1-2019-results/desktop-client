@@ -26,6 +26,7 @@ export interface Race {
             sectors: Array<number>
             position: number
             invalid: boolean
+            pit: boolean
         }>
     }>
     uid: string
